@@ -55,13 +55,15 @@
             <button onclick="displayWord()">Display</button>
             <button onclick="replayWord()">Replay</button>
             <button onclick="nextWord()">Next</button>
+            <button id="autoPlayButton" onclick="toggleAutoPlay()">Start Auto Play</button>
         </div>
     </div>
     
 
     <script>
-        // const words = ["apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "honeydew"];
+        let words = [];
         let currentWord = '';
+        let autoPlayInterval = null;
 
         function getRandomWord() {
             const randomIndex = Math.floor(Math.random() * words.length);
@@ -83,6 +85,10 @@
         }
 
         function nextWord() {
+            if (words.length === 0) {
+                alert('Word list is empty. Please check if words.txt is loaded correctly.');
+                return;
+            }
             currentWord = getRandomWord();
             document.getElementById('word').textContent = currentWord;
             hideWord();
@@ -103,13 +109,43 @@
             nextWord();
         }
 
+        function toggleAutoPlay() {
+            const autoPlayButton = document.getElementById('autoPlayButton');
+            if (autoPlayInterval === null) {
+                autoPlayButton.textContent = 'Stop Auto Play';
+                autoPlay();
+            } else {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+                autoPlayButton.textContent = 'Start Auto Play';
+            }
+        }
+
+        function autoPlay() {
+            nextWord();
+            autoPlayInterval = setInterval(() => {
+                nextWord();
+            }, 3000); // 6 seconds interval (3 seconds delay + 3 seconds to speak the word)
+        }
+
         // Load words from a local file
         fetch('words.txt')
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
             .then(text => {
                 words = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
+                console.log('Words loaded:', words);
                 document.getElementById('startButton').disabled = false;  // Enable the start button once words are loaded
+            })
+            .catch(error => {
+                console.error('Error loading words:', error);
+                alert('Failed to load words.txt. Please check the console for more details.');
             });
+
     </script>
 
 </body>
