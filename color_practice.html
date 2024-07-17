@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Speaking Training</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #colorContainer {
+            text-align: center;
+        }
+        #colorBox {
+            width: 200px;
+            height: 200px;
+            margin: 20px 0;
+            border: 2px solid black;
+        }
+        #startButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            margin-left: 50px;
+        }
+        #nextButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            margin: auto;
+        }
+        #backButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            margin: auto;
+        }
+        button:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+    <h1>Color Speaking Training</h1>
+<body>
+    <div id="colorContainer">
+        <button id="backButton" onclick="window.location.href='index.html'">Back</button>
+        <button id="startButton">Start Color Speaking Training</button>
+        <div id="colorBox" style="display: none;"></div>
+        <button id="nextButton" style="display: none;">Next</button>
+    </div>
+
+
+    <script>
+        const colors = ["red", "yellow", "blue", "green", "white", "black", "gray", "purple", "pink"];
+        const startButton = document.getElementById('startButton');
+        const colorBox = document.getElementById('colorBox');
+        const nextButton = document.getElementById('nextButton');
+
+        startButton.addEventListener('click', () => {
+            startButton.style.display = 'none';
+            colorBox.style.display = 'block';
+            nextButton.style.display = 'block';
+            changeColor();
+        });
+
+        nextButton.addEventListener('click', changeColor);
+
+        function changeColor() {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            colorBox.style.backgroundColor = randomColor;
+        }
+    </script>
+</body>
+</html>
